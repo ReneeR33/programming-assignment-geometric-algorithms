@@ -1,0 +1,8 @@
+horizontal segments 2
+4 14 5
+10 18 7
+vertical segments 4
+2 4 9
+16 4 11
+12 1 9
+14 1 10
