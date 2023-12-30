@@ -36,7 +36,7 @@ int main() {
         });
     }
 
-    std::sort(events.begin(), events.end(), [&](const Event& l, const Event& r) {
+    std::sort(events.begin(), events.end(), [](const Event& l, const Event& r) {
         return (l.point.y > r.point.y) || 
                (l.point.y == r.point.y && 
                     ((l.type == Event::Type::VERTICAL_TOP && r.type == Event::Type::HORIZONTAL) ||
