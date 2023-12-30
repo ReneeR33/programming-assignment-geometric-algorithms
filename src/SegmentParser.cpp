@@ -1,6 +1,11 @@
 #include "SegmentParser.hpp"
 
 #include <array>
+#include <string>
+
+#ifdef _WIN32
+typedef unsigned int uint;
+#endif
 
 
 std::vector<Segment> SegmentParser::parse(std::istream &input_stream) {
@@ -17,7 +22,8 @@ std::vector<Segment> SegmentParser::parse(std::istream &input_stream) {
     uint lines_remaining;
 
     State state = NONE;
-    bool read_horizontal, read_vertical = false;
+    bool read_horizontal = false;
+    bool read_vertical = false;
     std::string line;
 
     while((!read_horizontal || !read_vertical)) {

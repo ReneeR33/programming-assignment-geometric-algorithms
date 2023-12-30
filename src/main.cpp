@@ -38,9 +38,10 @@ int main() {
 
     std::sort(events.begin(), events.end(), [&](const Event& l, const Event& r) {
         return (l.point.y > r.point.y) || 
-               (l.point.y == r.point.y && l.point.x < r.point.x) || 
-               (l.point.y == r.point.y && l.point.x == r.point.x && l.type == Event::Type::HORIZONTAL && r.type == Event::Type::VERTICAL_BOTTOM) ||
-               (l.point.y == r.point.y && l.point.x == r.point.x && l.type == Event::Type::VERTICAL_TOP && r.type == Event::Type::HORIZONTAL);
+               (l.point.y == r.point.y && 
+                    ((l.type == Event::Type::VERTICAL_TOP && r.type == Event::Type::HORIZONTAL) ||
+                     (l.type == Event::Type::HORIZONTAL && r.type == Event::Type::VERTICAL_BOTTOM) ||
+                     (l.type == Event::Type::VERTICAL_TOP && r.type == Event::Type::VERTICAL_BOTTOM)));
     });
 
     #ifdef DEBUG
