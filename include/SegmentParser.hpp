@@ -4,12 +4,18 @@
 #include <vector>
 #include <iostream>
 #include "Segment.hpp"
+#include "Event.hpp"
 
 
 class SegmentParser
 {
 public:
-    std::vector<Segment> parse(std::istream &input_stream);
+    void parse(
+        std::istream &input_stream, 
+        std::vector<Segment> &hs_out, 
+        std::vector<Segment> &vs_out, 
+        std::vector<Event> &e_out
+    );
 };
 
 

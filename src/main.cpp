@@ -10,11 +10,14 @@
 
 int main() {
     SegmentParser parser;
-    auto segments = parser.parse(std::cin);
 
+    std::vector<Segment> horizontal_segments;
+    std::vector<Segment> vertical_segments;
     std::vector<Event> events;
 
-    for (auto& segment : segments) {
+    parser.parse(std::cin, horizontal_segments, vertical_segments, events);
+
+    /*for (auto& segment : segments) {
         Event::Type type;
 
         if (segment.is_vertical()) {
@@ -34,7 +37,7 @@ int main() {
             .point = segment.end,
             .segment = &segment
         });
-    }
+    }*/
 
     std::sort(events.begin(), events.end(), [](const Event& l, const Event& r) {
         return (l.point.y > r.point.y) || 
