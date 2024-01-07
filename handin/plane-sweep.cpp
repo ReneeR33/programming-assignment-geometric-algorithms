@@ -432,10 +432,8 @@ uint RBTree::elements_in_range(uint lb, uint rb) const {
             split = split->right;
         }
     }
-
-    if (split == NIL && p == NIL) {
-        return 0;
-    } else if (split == NIL && p != NIL) {
+    
+    if (split == NIL) {
         return result;
     }
 
