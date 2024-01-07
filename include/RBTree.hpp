@@ -17,7 +17,7 @@ public:
 
     struct Node {
         uint key;
-        size_t size;
+        uint elements_in_subtree;
         Color color;
         NodePtr parent;
         NodePtr left;
@@ -29,12 +29,10 @@ public:
     RBTree();
     ~RBTree();
 
-    NodePtr get_root() const { return this->root; }
-
     void insert(uint key);
     void remove(uint key);
 
-    size_t elements_in_range(uint lb, uint rb) const;
+    uint elements_in_range(uint lb, uint rb) const;
 
 private:
     static Node NILNode;
@@ -48,7 +46,7 @@ private:
     void insert_fixup(NodePtr z);
     void remove_fixup(NodePtr x);
 
-    size_t elements_in_tree(NodePtr root) const;
+    uint elements_in_tree(NodePtr root) const;
 
     void delete_tree(NodePtr root);
 };

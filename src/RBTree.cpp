@@ -1,15 +1,11 @@
 #include "RBTree.hpp"
 #include <stdexcept>
 #include <string>
-// for debugging
-//#include <iostream>
-//#define DEBUG
-
 
 
 RBTree::Node RBTree::NILNode = {
     .key = 0,
-    .size = 0,
+    .elements_in_subtree = 0,
     .color = RBTree::Color::BLACK,
     .parent = &NILNode,
     .left = &NILNode,
@@ -32,7 +28,7 @@ void RBTree::insert(uint key) {
     NodePtr y = NIL;
     
     while (x != NIL) {
-        x->size++;
+        x->elements_in_subtree++;
         y = x;
         if (key < x->key) {
             x = x->left;
@@ -47,7 +43,7 @@ void RBTree::insert(uint key) {
     z->parent = y;
     z->left = NIL;
     z->right = NIL;
-    z->size = 1;
+    z->elements_in_subtree = 1;
 
     if (y == NIL) {
         this->root = z;
@@ -68,7 +64,7 @@ void RBTree::remove(uint key) {
     //TODO: handle duplicates(?)
     NodePtr z = this->root;
     while (z != NIL && z->key != key) {
-        z->size--;
+        z->elements_in_subtree--;
         if (key < z->key) {
             z = z->left;
         } else {
@@ -80,7 +76,7 @@ void RBTree::remove(uint key) {
         throw std::runtime_error("function RBTree::remove could not delete element, element " + std::to_string(key) + " not found in tree");
     }
 
-    z->size--;
+    z->elements_in_subtree--;
 
     NodePtr x, y;
     y = z;
@@ -96,7 +92,7 @@ void RBTree::remove(uint key) {
         //y = minimum(z->right);
         NodePtr y = z->right;
         while (y->left != NIL) {
-            y->size--;
+            y->elements_in_subtree--;
             y = y->left;
         }
 
@@ -114,7 +110,7 @@ void RBTree::remove(uint key) {
         y->left = z->left;
         y->left->parent = y;
         y->color = z->color;
-        y->size = z->size;
+        y->elements_in_subtree = z->elements_in_subtree;
     }
 
     if (y_original_color == Color::BLACK) {
@@ -125,8 +121,8 @@ void RBTree::remove(uint key) {
     delete z;
 }
 
-size_t RBTree::elements_in_range(uint lb, uint rb) const {
-    size_t result = 0;
+uint RBTree::elements_in_range(uint lb, uint rb) const {
+    uint result = 0;
 
     NodePtr split = this->root;
     NodePtr p = NIL;
@@ -148,15 +144,8 @@ size_t RBTree::elements_in_range(uint lb, uint rb) const {
     if (split == NIL && p == NIL) {
         return 0;
     } else if (split == NIL && p != NIL) {
-        #ifdef DEBUG
-        std::cout << "didn't find a split value... last element before nill in search path: " << p->key << std::endl;
-        #endif
         return result;
     }
-
-    #ifdef DEBUG
-    std::cout << "split: " << split->key << std::endl;
-    #endif
 
     // also count the split node
     result++;
@@ -221,8 +210,8 @@ void RBTree::left_rotate(NodePtr x) {
     y->left = x;
     x->parent = y;
 
-    x->size = 1 + x->left->size + x->right->size;
-    y->size = 1 + y->left->size + y->right->size;
+    x->elements_in_subtree = 1 + x->left->elements_in_subtree + x->right->elements_in_subtree;
+    y->elements_in_subtree = 1 + y->left->elements_in_subtree + y->right->elements_in_subtree;
 }
 
 void RBTree::right_rotate(NodePtr y) {
@@ -256,8 +245,8 @@ void RBTree::right_rotate(NodePtr y) {
     x->right = y;
     y->parent = x;
 
-    y->size = 1 + y->left->size + y->right->size;
-    x->size = 1 + x->left->size + x->right->size;
+    y->elements_in_subtree = 1 + y->left->elements_in_subtree + y->right->elements_in_subtree;
+    x->elements_in_subtree = 1 + x->left->elements_in_subtree + x->right->elements_in_subtree;
 }
 
 void RBTree::transplant(NodePtr u, NodePtr v) {
@@ -374,14 +363,8 @@ void RBTree::remove_fixup(NodePtr x) {
     x->color = Color::BLACK;
 }
 
-size_t RBTree::elements_in_tree(NodePtr root) const {
-    /*if (root == NIL) {
-        return 0;
-    }
-
-    return 1 + elements_in_tree(root->left) + elements_in_tree(root->right);
-    */
-   return root->size;
+uint RBTree::elements_in_tree(NodePtr root) const {
+   return root->elements_in_subtree;
 }
 
 void RBTree::delete_tree(NodePtr root) {

@@ -25,28 +25,6 @@ int main() {
                      (l.type == Event::Type::VERTICAL_TOP && r.type == Event::Type::VERTICAL_BOTTOM)));
     });
 
-    #ifdef DEBUG
-    for (auto& event : events) {
-        switch (event.type)
-        {
-        case Event::Type::VERTICAL_TOP:
-            std::cout << "Added vertical start event: (" << event.point.x << ", " << event.point.y << ")" << std::endl;
-            break;
-        
-        case Event::Type::VERTICAL_BOTTOM:
-            std::cout << "Added vertical end event: (" << event.point.x << ", " << event.point.y << ")" << std::endl;
-            break;
-
-        case Event::Type::HORIZONTAL:
-            std::cout << "Added horizontal event: (" << event.point.x << ", " << event.point.y << ")" << std::endl;
-            break;
-        
-        default:
-            break;
-        }
-    }
-    #endif
-
     uint intersections = 0;
     RBTree tree;
 
@@ -54,15 +32,10 @@ int main() {
         switch (event.type)
         {
         case Event::Type::VERTICAL_TOP:
-            //std::cout << "Adding " << event.point.x << '\n';
-            /*if (event.point.x == 0) {
-                std::cout << "Adding " << event.point.x << '\n';
-            }*/
             tree.insert(event.point.x);
             break;
         
         case Event::Type::VERTICAL_BOTTOM:
-            //std::cout << "Removing " << event.point.x << '\n';
             tree.remove(event.point.x);
             break;
 

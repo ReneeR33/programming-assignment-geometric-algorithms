@@ -48,7 +48,6 @@ void SegmentParser::parse(
         line_substrings[2] = line.substr(space_indices[1] + 1, line.size() - space_indices[1] - 1);
 
         if (line[0] == 'h') {
-            // stoi? uint?
             lines_remaining = std::stoul(line_substrings[2]);
             hs_out.resize(lines_remaining);
             state = R_HORIZONTAL;
