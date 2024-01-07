@@ -10,32 +10,13 @@
 
 int main() {
     SegmentParser parser;
-    auto segments = parser.parse(std::cin);
 
+    std::vector<Segment> horizontal_segments;
+    std::vector<Segment> vertical_segments;
     std::vector<Event> events;
 
-    for (auto& segment : segments) {
-        Event::Type type;
-
-        if (segment.is_vertical()) {
-            type = Event::Type::VERTICAL_BOTTOM;
-            events.push_back({
-                .type = type,
-                .point = segment.start,
-                .segment = &segment
-            });
-            type = Event::Type::VERTICAL_TOP;
-        } else {
-            type = Event::Type::HORIZONTAL;
-        }
-
-        events.push_back({
-            .type = type,
-            .point = segment.end,
-            .segment = &segment
-        });
-    }
-
+    parser.parse(std::cin, horizontal_segments, vertical_segments, events);
+    
     std::sort(events.begin(), events.end(), [](const Event& l, const Event& r) {
         return (l.point.y > r.point.y) || 
                (l.point.y == r.point.y && 
@@ -66,17 +47,22 @@ int main() {
     }
     #endif
 
-    int intersections = 0;
+    uint intersections = 0;
     RBTree tree;
 
     for (auto& event : events) {
         switch (event.type)
         {
         case Event::Type::VERTICAL_TOP:
+            //std::cout << "Adding " << event.point.x << '\n';
+            /*if (event.point.x == 0) {
+                std::cout << "Adding " << event.point.x << '\n';
+            }*/
             tree.insert(event.point.x);
             break;
         
         case Event::Type::VERTICAL_BOTTOM:
+            //std::cout << "Removing " << event.point.x << '\n';
             tree.remove(event.point.x);
             break;
 

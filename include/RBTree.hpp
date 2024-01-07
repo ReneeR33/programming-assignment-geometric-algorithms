@@ -2,6 +2,9 @@
 #define RB_TREE
 
 
+typedef unsigned int uint;
+
+
 class RBTree {
 public:
     struct Node;
@@ -13,7 +16,8 @@ public:
     };
 
     struct Node {
-        int key;
+        uint key;
+        size_t size;
         Color color;
         NodePtr parent;
         NodePtr left;
@@ -27,10 +31,10 @@ public:
 
     NodePtr get_root() const { return this->root; }
 
-    void insert(int key);
-    void remove(int key);
+    void insert(uint key);
+    void remove(uint key);
 
-    int elements_in_range(int lb, int rb);
+    size_t elements_in_range(uint lb, uint rb) const;
 
 private:
     static Node NILNode;
@@ -44,8 +48,7 @@ private:
     void insert_fixup(NodePtr z);
     void remove_fixup(NodePtr x);
 
-    int elements_in_tree(NodePtr root);
-    NodePtr minimum(NodePtr root);
+    size_t elements_in_tree(NodePtr root) const;
 
     void delete_tree(NodePtr root);
 };
