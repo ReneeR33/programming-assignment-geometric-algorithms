@@ -142,7 +142,7 @@ uint RBTree::elements_in_range(uint lb, uint rb) const {
         p = split;
 
         if (split->key >= lb && split->key <= rb) {
-            result++;
+            result += split->count;
         }
 
         if (lb < split->key) {
@@ -157,18 +157,18 @@ uint RBTree::elements_in_range(uint lb, uint rb) const {
     }
 
     // also count the split node
-    result++;
+    result += split->count;
 
     NodePtr x = split->left;
     while (x != NIL)
     {
         if (lb < x->key) {
-            result++;
+            result += x->count;
             result += elements_in_tree(x->right);
             x = x->left;
         } else {
             if (lb == x->key) {
-                result++;
+                result += x->count;
             }
             x = x->right;
         }
@@ -177,7 +177,7 @@ uint RBTree::elements_in_range(uint lb, uint rb) const {
     while (x != NIL)
     {
         if (rb >= x->key) {
-            result++;
+            result += x->count;
             result += elements_in_tree(x->left);
             x = x->right;
         } else {
