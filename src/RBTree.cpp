@@ -1,6 +1,7 @@
 #include "RBTree.hpp"
 #include <stdexcept>
 #include <string>
+#include <iostream>
 
 
 RBTree::Node RBTree::NILNode = {
@@ -105,6 +106,11 @@ void RBTree::remove(uint key) {
         while (y->left != NIL) {
             y->elements_in_subtree--;
             y = y->left;
+        }
+        NodePtr p = y->parent;
+        while (p != z) {
+            p->elements_in_subtree -= y->count - 1;
+            p = p->parent;
         }
 
         y_original_color = y->color;
@@ -219,8 +225,8 @@ void RBTree::left_rotate(NodePtr x) {
     y->left = x;
     x->parent = y;
 
-    x->elements_in_subtree = 1 + x->left->elements_in_subtree + x->right->elements_in_subtree;
-    y->elements_in_subtree = 1 + y->left->elements_in_subtree + y->right->elements_in_subtree;
+    x->elements_in_subtree = x->count + x->left->elements_in_subtree + x->right->elements_in_subtree;
+    y->elements_in_subtree = y->count + y->left->elements_in_subtree + y->right->elements_in_subtree;
 }
 
 void RBTree::right_rotate(NodePtr y) {
@@ -254,8 +260,8 @@ void RBTree::right_rotate(NodePtr y) {
     x->right = y;
     y->parent = x;
 
-    y->elements_in_subtree = 1 + y->left->elements_in_subtree + y->right->elements_in_subtree;
-    x->elements_in_subtree = 1 + x->left->elements_in_subtree + x->right->elements_in_subtree;
+    y->elements_in_subtree = y->count + y->left->elements_in_subtree + y->right->elements_in_subtree;
+    x->elements_in_subtree = x->count + x->left->elements_in_subtree + x->right->elements_in_subtree;
 }
 
 void RBTree::transplant(NodePtr u, NodePtr v) {

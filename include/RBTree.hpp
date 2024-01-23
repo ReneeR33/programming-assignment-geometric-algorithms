@@ -17,6 +17,7 @@ public:
 
     struct Node {
         uint key;
+        //does not work!
         uint count;
         uint elements_in_subtree;
         Color color;

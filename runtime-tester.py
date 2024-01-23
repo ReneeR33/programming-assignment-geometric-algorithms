@@ -26,7 +26,10 @@ def main():
     with open(output_file, 'w') as file:
         file.write('horizontal segments,vertical segments,runtime(ms)\n')
 
-    for file in os.listdir(input_folder_path):
+    input_files = os.listdir(input_folder_path)
+    input_files.sort()
+
+    for file in input_files:
         file_path = os.path.join(input_folder_path, file)
         h,v = count_segments(file_path)
 
