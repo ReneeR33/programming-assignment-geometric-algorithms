@@ -27,7 +27,7 @@ void RBTree::insert(uint key) {
     NodePtr x = this->root;
     NodePtr y = NIL;
     
-    while (x != NIL) {
+    while (x != NIL && x->key != key) {
         x->elements_in_subtree++;
         y = x;
         if (key < x->key) {
@@ -37,6 +37,12 @@ void RBTree::insert(uint key) {
         }
     }
 
+    if (x != NIL) {
+        x->count++;
+        x->elements_in_subtree++;
+        return;
+    }
+
     NodePtr z = new Node();
     z->key = key;
     z->color = Color::RED;
@@ -44,6 +50,7 @@ void RBTree::insert(uint key) {
     z->left = NIL;
     z->right = NIL;
     z->elements_in_subtree = 1;
+    z->count = 1;
 
     if (y == NIL) {
         this->root = z;
@@ -61,7 +68,6 @@ void RBTree::remove(uint key) {
         throw std::runtime_error("function RBTree::remove could not delete element, tree was empty");
     }
 
-    //TODO: handle duplicates(?)
     NodePtr z = this->root;
     while (z != NIL && z->key != key) {
         z->elements_in_subtree--;
@@ -77,6 +83,11 @@ void RBTree::remove(uint key) {
     }
 
     z->elements_in_subtree--;
+
+    if (z->count > 1) {
+        z->count--;
+        return;
+    }
 
     NodePtr x, y;
     y = z;
